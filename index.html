@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Holding Tax BD — Bangladesh Holding Tax Estimator</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<header class="top">
+  <div>
+    <h1 id="appTitle">Holding Tax BD</h1>
+    <p id="appSub" class="sub">Bangladesh city-corporation holding (property) tax estimator</p>
+  </div>
+  <button id="langBtn" class="lang">বাংলা</button>
+</header>
+
+<nav class="tabs" role="tablist">
+  <button data-tab="calc" class="active">Calculator</button>
+  <button data-tab="rates">City Rates</button>
+  <button data-tab="guide">Payment Guide</button>
+  <button data-tab="saved">Saved</button>
+</nav>
+
+<main>
+  <section id="panel-calc">
+    <div class="card">
+      <label class="field-label" id="rentLabel" for="annualInput">Annual rent (assessed annual value)</label>
+      <p class="hint" id="rentHint"></p>
+      <div class="radio-row" role="radiogroup" aria-label="Rent input mode">
+        <label><input type="radio" name="rentMode" value="annual" checked> <span id="modeAnnualLbl">Annual rent</span></label>
+        <label><input type="radio" name="rentMode" value="monthly"> <span id="modeMonthlyLbl">Monthly rent</span></label>
+        <label><input type="radio" name="rentMode" value="area"> <span id="modeAreaLbl">From floor area</span></label>
+      </div>
+      <div id="annualWrap" class="field">
+        <input type="number" id="annualInput" min="0" max="100000000" step="1" placeholder="240000" inputmode="numeric">
+        <span class="unit">৳ / year</span>
+      </div>
+      <div id="monthlyWrap" class="field" hidden>
+        <label class="field-label" id="monthlyLabel" for="monthlyInput">Monthly rent</label>
+        <input type="number" id="monthlyInput" min="0" max="10000000" step="1" placeholder="20000" inputmode="numeric">
+        <span class="unit">৳ / month</span>
+      </div>
+      <div id="areaWrap" class="field" hidden>
+        <label class="field-label" id="areaLabel" for="areaInput">Floor area (sq ft)</label>
+        <input type="number" id="areaInput" min="0" max="1000000" step="1" placeholder="1000" inputmode="numeric">
+        <label class="field-label" id="perSqftLabel" for="perSqftInput">Assessed rent per sq ft / month</label>
+        <input type="number" id="perSqftInput" min="0" max="10000" step="0.5" placeholder="20" inputmode="decimal">
+        <span class="unit">৳ / sq ft / month</span>
+      </div>
+
+      <label class="field-label" id="cityLabel" for="citySelect">City corporation / authority</label>
+      <select id="citySelect"></select>
+
+      <label class="check"><input type="checkbox" id="selfCheck"> <span id="selfLbl">Owner lives in (part of) the holding (40% extra deduction)</span></label>
+
+      <label class="field-label" id="loanLabel" for="loanInput">Deductible loan interest per year (optional)</label>
+      <input type="number" id="loanInput" min="0" max="100000000" step="1" placeholder="0" inputmode="numeric">
+
+      <p class="field-label" id="modeLabel">Rate method</p>
+      <div class="radio-row" role="radiogroup" aria-label="Rate method">
+        <label><input type="radio" name="rateMode" value="combined" checked> <span id="modeCombinedLbl">One combined rate</span></label>
+        <label><input type="radio" name="rateMode" value="components"> <span id="modeComponentsLbl">Component rates (Ideal Tax Schedule)</span></label>
+      </div>
+      <div id="combinedWrap" class="field">
+        <label class="field-label" id="combinedLabel" for="combinedInput">Combined rate (%)</label>
+        <input type="number" id="combinedInput" min="0" max="100" step="0.5" value="12" inputmode="decimal">
+        <p class="hint" id="combinedHint"></p>
+        <p class="hint warn" id="noPublished" hidden></p>
+      </div>
+      <div id="componentsWrap" class="field" hidden>
+        <p class="hint" id="componentsHint"></p>
+        <div id="componentsList"></div>
+      </div>
+
+      <p id="calcError" class="error" hidden></p>
+      <button id="calcBtn" class="primary">Calculate holding tax</button>
+      <button id="saveBtn" class="secondary" disabled>Save this estimate</button>
+      <span id="saveMsg" class="ok"></span>
+    </div>
+
+    <div id="resultBox" class="card result" hidden></div>
+    <p id="disclaimer" class="disclaimer"></p>
+  </section>
+
+  <section id="panel-rates" hidden>
+    <div class="card">
+      <h2 id="ratesTitle">Reported combined rates by authority</h2>
+      <p class="hint" id="ratesHint"></p>
+      <table class="rates" id="ratesTable"></table>
+    </div>
+  </section>
+
+  <section id="panel-guide" hidden>
+    <div class="card">
+      <h2 id="guideTitle">How to pay your holding tax</h2>
+      <ol id="guideSteps" class="steps"></ol>
+      <h3 id="docsTitle">Documents you may need</h3>
+      <ul id="guideDocs"></ul>
+      <h3 id="noteTitle">Good to know</h3>
+      <ul id="guideNotes"></ul>
+    </div>
+  </section>
+
+  <section id="panel-saved" hidden>
+    <div class="card">
+      <h2 id="savedTitle">Saved estimates</h2>
+      <div class="btn-row">
+        <button id="exportBtn" class="secondary">Export JSON</button>
+        <button id="importBtn" class="secondary">Import JSON</button>
+        <button id="eraseBtn" class="danger">Erase all</button>
+        <input type="file" id="importFile" accept=".json,application/json" hidden>
+      </div>
+      <p id="importMsg" class="ok"></p>
+      <div id="savedList"></div>
+    </div>
+  </section>
+</main>
+
+<footer><p id="footNote"></p></footer>
+
+<script src="js/calc.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
